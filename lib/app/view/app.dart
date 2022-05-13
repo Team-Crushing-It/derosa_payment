@@ -7,6 +7,7 @@
 
 import 'package:derosa_payment/counter/counter.dart';
 import 'package:derosa_payment/l10n/l10n.dart';
+import 'package:derosa_payment/make_payment/view/make_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -27,7 +28,7 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const MakePayment(),
     );
   }
 }
