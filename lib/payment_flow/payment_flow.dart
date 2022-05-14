@@ -45,6 +45,7 @@ class _PaymentSelectFormState extends State<PaymentSelectForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xff2A3066),
         title: const Text('Pay With'),
@@ -202,6 +203,7 @@ class _PaymentProcessingState extends State<PaymentProcessing>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xff2A3066),
         title: const Text('Processing'),
@@ -223,6 +225,7 @@ class PaymentComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xff2A3066),
         title: const Text('Payment Complete'),
