@@ -2,11 +2,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 
+enum PaymentMethod { existing, non }
+
 List<Page> onGeneratePaymentPages(Payment payment, List<Page> pages) {
   return [
-    MaterialPage<void>(child: PaymentNameForm(), name: '/payment'),
-    if (payment.name != null) MaterialPage<void>(child: PaymentAgeForm()),
-    if (payment.age != null) MaterialPage<void>(child: PaymentWeightForm()),
+    MaterialPage<void>(child: PaymentSelectForm(), name: '/payment'),
+    if (payment.type != null)
+      const MaterialPage<void>(child: PaymentProcessing()),
+    if (payment.processed != null)
+      const MaterialPage<void>(child: PaymentComplete()),
   ];
 }
 
@@ -24,131 +28,218 @@ class PaymentFlow extends StatelessWidget {
   }
 }
 
-class PaymentNameForm extends StatefulWidget {
+class PaymentSelectForm extends StatefulWidget {
   @override
-  _PaymentNameFormState createState() => _PaymentNameFormState();
+  _PaymentSelectFormState createState() => _PaymentSelectFormState();
 }
 
-class _PaymentNameFormState extends State<PaymentNameForm> {
-  var _name = '';
+class _PaymentSelectFormState extends State<PaymentSelectForm> {
+  var _type = '';
 
   void _continuePressed() {
-    context.flow<Payment>().update((payment) => payment.copyWith(name: _name));
+    context.flow<Payment>().update((payment) => payment.copyWith(type: _type));
+  }
+
+  PaymentMethod? _character;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xff2A3066),
+        title: const Text('Pay With'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: <Widget>[
+                ListTile(
+                  title: const Text('Saved payment method'),
+                  leading: Radio<PaymentMethod>(
+                    value: PaymentMethod.existing,
+                    groupValue: _character,
+                    onChanged: (PaymentMethod? value) {
+                      setState(() {
+                        _character = value;
+                      });
+                    },
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.account_balance,
+                        color: Colors.green,
+                        size: 30.0,
+                      ),
+                      Text('PEOPLE\'s UNITED BANK, N.A. ****9182')
+                    ],
+                  ),
+                ),
+                ListTile(
+                  title: const Text('Different payment method'),
+                  leading: Radio<PaymentMethod>(
+                    value: PaymentMethod.non,
+                    groupValue: _character,
+                    onChanged: (PaymentMethod? value) {
+                      setState(() {
+                        _character = value;
+                      });
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.account_balance,
+                            color: Colors.black,
+                            size: 30.0,
+                          ),
+                          Text('ACH Debit'),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.credit_card,
+                            color: Colors.black,
+                            size: 30.0,
+                          ),
+                          Text('Credit/Debit'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Stack(
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(16.0),
+                        primary: Colors.white,
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: _character != null ? _continuePressed : null,
+                      child: const Text('Continue'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentProcessing extends StatefulWidget {
+  const PaymentProcessing({Key? key}) : super(key: key);
+
+  @override
+  _PaymentProcessingState createState() => _PaymentProcessingState();
+}
+
+class _PaymentProcessingState extends State<PaymentProcessing>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener(
+        (status) {
+          if (status == AnimationStatus.completed) {
+            Future.delayed(const Duration(seconds: 1), _continue);
+          }
+        },
+      )
+      ..drive(CurveTween(curve: Curves.easeOutQuart))
+      ..forward();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _continue() {
+    context
+        .flow<Payment>()
+        .update((payment) => payment.copyWith(processed: true));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => context.flow<Payment>().complete(),
-        ),
-        title: const Text('Name'),
+        backgroundColor: const Color(0xff2A3066),
+        title: const Text('Processing'),
+        leading: Container(),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                onChanged: (value) => setState(() => _name = value),
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  hintText: 'John Doe',
-                ),
-              ),
-              ElevatedButton(
-                child: const Text('Continue'),
-                onPressed: _name.isNotEmpty ? _continuePressed : null,
-              )
-            ],
-          ),
+        child: CircularProgressIndicator(
+          value: controller.value,
+          semanticsLabel: 'circular progress indicator',
         ),
       ),
     );
   }
 }
 
-class PaymentAgeForm extends StatefulWidget {
-  @override
-  _PaymentAgeFormState createState() => _PaymentAgeFormState();
-}
-
-class _PaymentAgeFormState extends State<PaymentAgeForm> {
-  int? _age;
-
-  void _continuePressed() {
-    context.flow<Payment>().update((payment) => payment.copyWith(age: _age));
-  }
+class PaymentComplete extends StatelessWidget {
+  const PaymentComplete({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Age')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                onChanged: (value) => setState(() => _age = int.parse(value)),
-                decoration: const InputDecoration(
-                  labelText: 'Age',
-                  hintText: '42',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              ElevatedButton(
-                child: const Text('Continue'),
-                onPressed: _age != null ? _continuePressed : null,
-              )
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff2A3066),
+        title: const Text('Payment Complete'),
+        leading: Container(),
       ),
-    );
-  }
-}
-
-class PaymentWeightForm extends StatefulWidget {
-  @override
-  _PaymentWeightFormState createState() => _PaymentWeightFormState();
-}
-
-class _PaymentWeightFormState extends State<PaymentWeightForm> {
-  int? _weight;
-
-  void _continuePressed() {
-    context
-        .flow<Payment>()
-        .complete((payment) => payment.copyWith(weight: _weight));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Weight')),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                onChanged: (value) {
-                  setState(() => _weight = int.tryParse(value));
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Weight (lbs)',
-                  hintText: '170',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              ElevatedButton(
-                child: const Text('Continue'),
-                onPressed: _weight != null ? _continuePressed : null,
-              )
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(
+              Icons.check_sharp,
+              color: Colors.green,
+              size: 70.0,
+            ),
+            Text('Payment can take up to 2 days to process'),
+          ],
         ),
       ),
     );
@@ -156,20 +247,16 @@ class _PaymentWeightFormState extends State<PaymentWeightForm> {
 }
 
 class Payment extends Equatable {
-  const Payment({this.name, this.age, this.weight});
+  const Payment({this.type, this.processed});
 
-  final String? name;
-  final int? age;
-  final int? weight;
+  final String? type;
+  final bool? processed;
 
-  Payment copyWith({String? name, int? age, int? weight}) {
+  Payment copyWith({String? type, bool? processed}) {
     return Payment(
-      name: name ?? this.name,
-      age: age ?? this.age,
-      weight: weight ?? this.weight,
-    );
+        type: type ?? this.type, processed: processed ?? this.processed);
   }
 
   @override
-  List<Object?> get props => [name, age, weight];
+  List<Object?> get props => [type, processed];
 }
