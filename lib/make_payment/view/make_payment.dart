@@ -7,6 +7,22 @@ class MakePayment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              // ignore: sized_box_for_whitespace
+              child:
+                  Container(width: 200, child: Image.asset('logo_light.png')),
+            )
+          ],
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Invoice May 8 - May 14',
+            style: TextStyle(
+              color: Color(0xff2A3066),
+            ),
+          )),
       body: Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(4),
@@ -41,7 +57,7 @@ class MakePayment extends StatelessWidget {
                       ),
                     );
                 },
-                child: const Text('Make Payment of 750 USD'),
+                child: const Text(r'Make Payment of $750'),
               ),
             ],
           ),

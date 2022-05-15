@@ -49,8 +49,20 @@ class _PaymentSelectFormState extends State<PaymentSelectForm> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xff2A3066),
-        title: const Text('Pay With'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            // ignore: sized_box_for_whitespace
+            child: Container(width: 200, child: Image.asset('logo_light.png')),
+          )
+        ],
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Pay With',
+          style: TextStyle(
+            color: Color(0xff2A3066),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -143,8 +155,9 @@ class _PaymentSelectFormState extends State<PaymentSelectForm> {
                         // backgroundColor: const Color(0xff2A3066),
                         // onSurface: Colors.white,
                         primary: Colors.white,
-                        textStyle:
-                            const TextStyle(fontSize: 20,),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
                       onPressed: _character != null ? _continuePressed : null,
                       child: const Text('Continue'),
@@ -210,8 +223,20 @@ class _PaymentProcessingState extends State<PaymentProcessing>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xff2A3066),
-        title: const Text('Processing'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            // ignore: sized_box_for_whitespace
+            child: Container(width: 200, child: Image.asset('logo_light.png')),
+          )
+        ],
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Processing',
+          style: TextStyle(
+            color: Color(0xff2A3066),
+          ),
+        ),
         leading: Container(),
       ),
       body: Center(
@@ -232,8 +257,20 @@ class PaymentComplete extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xff2A3066),
-        title: const Text('Payment Complete'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            // ignore: sized_box_for_whitespace
+            child: Container(width: 200, child: Image.asset('logo_light.png')),
+          )
+        ],
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Payment Complete',
+          style: TextStyle(
+            color: Color(0xff2A3066),
+          ),
+        ),
         leading: Container(),
       ),
       body: Center(

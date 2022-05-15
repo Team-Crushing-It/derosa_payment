@@ -18,6 +18,10 @@ dependencies:
   equatable: ^2.0.3
   flow_builder: ^0.0.8
 
+
+assets:
+  - assets/
+
 dev_dependencies:
   bloc_test: ^9.0.3
   flutter_test:
