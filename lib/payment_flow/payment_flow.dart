@@ -65,7 +65,7 @@ class _PaymentSelectFormState extends State<PaymentSelectForm> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(48),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -1,8 +1,30 @@
 import 'package:derosa_payment/payment_flow/payment_flow.dart';
 import 'package:flutter/material.dart';
 
-class MakePayment extends StatelessWidget {
+class MakePayment extends StatefulWidget {
   const MakePayment({Key? key}) : super(key: key);
+
+  @override
+  State<MakePayment> createState() => _MakePaymentState();
+}
+
+class _MakePaymentState extends State<MakePayment> {
+  Image? logo;
+
+  @override
+  void initState() {
+    super.initState();
+
+    logo = Image.asset('logo_light.png');
+  }
+
+   // Caching the image
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    precacheImage(logo!.image, context);
+  }
 
   @override
   Widget build(BuildContext context) {
