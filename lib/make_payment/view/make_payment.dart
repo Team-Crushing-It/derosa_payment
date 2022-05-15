@@ -40,7 +40,7 @@ class _MakePaymentState extends State<MakePayment> {
           ],
           backgroundColor: Colors.white,
           title: const Text(
-            'Invoice May 8 - May 14',
+            'Invoice May 15 - May 21',
             style: TextStyle(
               color: Color(0xff2A3066),
             ),
@@ -79,7 +79,7 @@ class _MakePaymentState extends State<MakePayment> {
                       ),
                     );
                 },
-                child: const Text(r'Make Payment of $750'),
+                child: const Text(r'Make Payment of $745'),
               ),
             ],
           ),
