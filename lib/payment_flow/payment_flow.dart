@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:equatable/equatable.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -137,9 +139,12 @@ class _PaymentSelectFormState extends State<PaymentSelectForm> {
                   children: <Widget>[
                     ElevatedButton(
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16),
+                        // backgroundColor: const Color(0xff2A3066),
+                        // onSurface: Colors.white,
                         primary: Colors.white,
-                        textStyle: const TextStyle(fontSize: 20),
+                        textStyle:
+                            const TextStyle(fontSize: 20,),
                       ),
                       onPressed: _character != null ? _continuePressed : null,
                       child: const Text('Continue'),
@@ -235,13 +240,34 @@ class PaymentComplete extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.check_sharp,
-              color: Colors.green,
-              size: 70.0,
+          children: [
+            Column(
+              children: const [
+                Icon(
+                  Icons.check_sharp,
+                  color: Colors.green,
+                  size: 70.0,
+                ),
+                Text('Payment can take up to 2 days to process'),
+              ],
             ),
-            Text('Payment can take up to 2 days to process'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: TextButton.styleFrom(
+                  // backgroundColor: const Color(0xff2A3066),
+                  surfaceTintColor: const Color(0xff2A3066),
+                  padding: const EdgeInsets.all(16.0),
+                  primary: Colors.white,
+                  textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                onPressed: () {
+                  print('close');
+                  window.close();
+                },
+                child: const Text('Close Tab'),
+              ),
+            ),
           ],
         ),
       ),
