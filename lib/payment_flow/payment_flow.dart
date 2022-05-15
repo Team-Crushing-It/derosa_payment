@@ -288,23 +288,6 @@ class PaymentComplete extends StatelessWidget {
                 Text('Payment can take up to 2 days to process'),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                style: TextButton.styleFrom(
-                  // backgroundColor: const Color(0xff2A3066),
-                  surfaceTintColor: const Color(0xff2A3066),
-                  padding: const EdgeInsets.all(16.0),
-                  primary: Colors.white,
-                  textStyle: const TextStyle(fontSize: 20, color: Colors.white),
-                ),
-                onPressed: () {
-                  print('close');
-                  window.close();
-                },
-                child: const Text('Close Tab'),
-              ),
-            ),
           ],
         ),
       ),
