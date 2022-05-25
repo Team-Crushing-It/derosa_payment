@@ -79,7 +79,7 @@ class _MakePaymentState extends State<MakePayment> {
                       ),
                     );
                 },
-                child: const Text(r'Make Payment of $745'),
+                child: const Text(r'Make Payment of $795'),
               ),
             ],
           ),
