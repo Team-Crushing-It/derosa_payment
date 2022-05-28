@@ -23,7 +23,6 @@ class FirestorePaymentsApi{
   /// time they were created, and then converts
   /// them from a [DocumentSnapshot] into
   /// a [Payment]
-  @override
   Stream<List<Payment>> getPayments() {
     return paymentsCollection.orderBy('id').snapshots().map(
           (snapshot) => snapshot.docs.map((e) => e.data()).toList(),
@@ -34,25 +33,14 @@ class FirestorePaymentsApi{
   /// If it doesn't, then we add a timestamp to the payment in
   /// order to preserve the order they were added
   /// Else, we update the existing one
-  @override
   Future<void> savePayment(Payment payment) async {
-    final check = await paymentsCollection.where('id', isEqualTo: payment.id).get();
-
-    if (check.docs.isEmpty) {
-      // final output =
-      //     payment.copyWith(id: Timestamp.now().millisecondsSinceEpoch.toString());
-      await paymentsCollection.add(payment);
-    } else {
-      final currentPaymentId = check.docs[0].reference.id;
-      await paymentsCollection.doc(currentPaymentId).update(payment.toJson());
-    }
+    await paymentsCollection.add(payment);
   }
 
   /// This method first checks to see if the payment
   /// exists, and if so it deletes it
   // TODO(fix): check out dismissiable bug
 
-  @override
   Future<void> deletePayment(String id) async {
     final check = await paymentsCollection.where('id', isEqualTo: id).get();
 
@@ -64,43 +52,8 @@ class FirestorePaymentsApi{
     }
   }
 
-  /// This method uses the Batch write api for
-  /// executing multiple operations in a single call,
-  /// which in this case is to delete all the payments that
-  /// are marked completed
-  @override
-  Future<int> clearCompleted() {
-    final batch = _firestore.batch();
-    return paymentsCollection
-        .where('isCompleted', isEqualTo: true)
-        .get()
-        .then((querySnapshot) {
-      final completedPaymentsAmount = querySnapshot.docs.length;
-      for (final document in querySnapshot.docs) {
-        batch.delete(document.reference);
-      }
-      batch.commit();
-      return completedPaymentsAmount;
-    });
-  }
 
-  /// This method uses the Batch write api for
-  /// executing multiple operations in a single call,
-  /// which in this case is to mark all the payments as
-  /// completed
-  @override
-  Future<int> completeAll({required bool isCompleted}) {
-    final batch = _firestore.batch();
-    return paymentsCollection.get().then((querySnapshot) {
-      final completedPaymentsAmount = querySnapshot.docs.length;
-      for (final document in querySnapshot.docs) {
-        final completedPayment = document.data().copyWith(isCompleted: true);
-        batch.update(document.reference, completedPayment.toJson());
-      }
-      batch.commit();
-      return completedPaymentsAmount;
-    });
-  }
+
 }
 
 

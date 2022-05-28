@@ -23,16 +23,12 @@ part 'payment.g.dart';
 @JsonSerializable()
 class Payment extends Equatable {
   /// {@macro payment}
-  Payment({
-    String? id,
+  const Payment({
+    required this.id,
     required this.title,
-    this.description = '',
-    this.isCompleted = false,
-  })  : assert(
-          id == null || id.isNotEmpty,
-          'id can not be null and should be empty',
-        ),
-        id = id ?? const Uuid().v4();
+    this.price = '',
+    this.timeStamp= 'DateTime.now().toString()',
+  });
 
   /// The unique identifier of the payment.
   ///
@@ -44,15 +40,15 @@ class Payment extends Equatable {
   /// Note that the title may be empty.
   final String title;
 
-  /// The description of the payment.
+  /// The price of the payment.
   ///
   /// Defaults to an empty string.
-  final String description;
+  final String price;
 
   /// Whether the payment is completed.
   ///
-  /// Defaults to `false`.
-  final bool isCompleted;
+  /// Defaults to `now`.
+  final String timeStamp;
 
   /// Returns a copy of this payment with the given values updated.
   ///
@@ -60,14 +56,14 @@ class Payment extends Equatable {
   Payment copyWith({
     String? id,
     String? title,
-    String? description,
-    bool? isCompleted,
+    String? price,
+    String? timeStamp
   }) {
     return Payment(
       id: id ?? this.id,
       title: title ?? this.title,
-      description: description ?? this.description,
-      isCompleted: isCompleted ?? this.isCompleted,
+      price: price ?? this.price,
+      timeStamp: timeStamp ?? this.timeStamp,
     );
   }
 
@@ -78,5 +74,5 @@ class Payment extends Equatable {
   JsonMap toJson() => _$PaymentToJson(this);
 
   @override
-  List<Object> get props => [id, title, description, isCompleted];
+  List<Object> get props => [id, title, price, timeStamp];
 }

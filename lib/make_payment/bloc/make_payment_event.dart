@@ -6,3 +6,9 @@ abstract class MakePaymentEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class Initalized extends MakePaymentEvent {}
+
+class DefaultSelected extends MakePaymentEvent {}
+
+class PaymentSuccess extends MakePaymentEvent {}
