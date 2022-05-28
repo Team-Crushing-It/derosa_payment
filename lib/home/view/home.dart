@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     const id = 'DeRosa';
     const title = 'May 30 - June 5';
-    const price = '795';
+    const price = '770';
     final timeStamp = DateTime.now().toString();
 
     return Scaffold(
