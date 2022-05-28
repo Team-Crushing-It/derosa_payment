@@ -1,32 +1,16 @@
-import 'package:derosa_payment/make_payment/bloc/make_payment_bloc.dart';
 import 'package:derosa_payment/payment_flow/payment_flow.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
-class MakePayement extends StatelessWidget {
-  const MakePayement({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MakePaymentBloc(
-          // game: game,
-          // gameRepository: context.read<FirestoreGameRepository>(),
-          // userId: context.read<AppBloc>().state.user!.id,
-          ),
-      child: const MakePaymentView(),
-    );
-  }
-}
-
-class MakePaymentView extends StatefulWidget {
-  const MakePaymentView({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<MakePaymentView> createState() => _MakePaymentViewState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MakePaymentViewState extends State<MakePaymentView> {
+class _HomeState extends State<Home> {
   Image? logo;
 
   @override
