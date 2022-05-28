@@ -1,90 +1,55 @@
-import 'package:derosa_payment/payment_flow/payment_flow.dart';
+import 'package:derosa_payment/app/bloc/app_bloc.dart';
+import 'package:derosa_payment/make_payment/make_payment.dart';
+import 'package:firestore_payments_api/firestore_payments_api.dart';
+import 'package:firestore_payments_api/models/models.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MakePayment extends StatefulWidget {
-  const MakePayment({Key? key}) : super(key: key);
 
-  @override
-  State<MakePayment> createState() => _MakePaymentState();
+
+List<Page> onGenerateLocationPages(MakePaymentState state, List<Page> pages) {
+  return [
+    MaterialPage<void>(child: PaymentSelectForm(), name: '/payment'),
+    if (state.status == MakePaymentStatus.defaultPayment)
+      const MaterialPage<void>(child: PaymentProcessing()),
+
+    if (state.status == MakePaymentStatus.success)
+      const MaterialPage<void>(child: PaymentComplete()),
+  ];
 }
 
-class _MakePaymentState extends State<MakePayment> {
-  Image? logo;
+class MakePayment extends StatelessWidget {
+  const MakePayment({Key? key, required this.payment}) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
+  final Payment payment;
 
-    logo = Image.asset('logo_light.png');
-  }
-
-   // Caching the image
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    precacheImage(logo!.image, context);
+  static Route<MakePaymentState> route(Payment payment) {
+    return MaterialPageRoute(builder: (_) => MakePayment(payment: payment));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              // ignore: sized_box_for_whitespace
-              child:
-                  Container(width: 200, child: Image.asset('logo_light.png')),
-            )
-          ],
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Invoice May 8 - May 14',
-            style: TextStyle(
-              color: Color(0xff2A3066),
-            ),
-          )),
-      body: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: Stack(
-            children: <Widget>[
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        Color(0xFF0D47A1),
-                        Color(0xFF1976D2),
-                        Color(0xFF42A5F5),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(16.0),
-                  primary: Colors.white,
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                onPressed: () async {
-                  await Navigator.of(context).push(PaymentFlow.route());
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(
-                        content: Text('Payment Complete!'),
-                      ),
-                    );
-                },
-                child: const Text(r'Make Payment of $745'),
-              ),
-            ],
-          ),
-        ),
+    return BlocProvider(
+      create: (context) => MakePaymentBloc(
+        payment: payment,
+        firestorePaymentsApi: context.read<FirestorePaymentsApi>(),
+        userId: context.read<AppBloc>().state.user!.id,
       ),
+      child: const _BuildFlow(),
+    );
+  }
+}
+
+class _BuildFlow extends StatelessWidget {
+  const _BuildFlow({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return FlowBuilder<MakePaymentState>(
+      state: context.select((MakePaymentBloc bloc) => bloc.state),
+      onGeneratePages: onGenerateLocationPages,
     );
   }
 }
