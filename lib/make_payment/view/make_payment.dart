@@ -46,6 +46,7 @@ class _BuildFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FlowBuilder<MakePaymentState>(
       state: context.select((MakePaymentBloc bloc) => bloc.state),
       onGeneratePages: onGenerateLocationPages,
