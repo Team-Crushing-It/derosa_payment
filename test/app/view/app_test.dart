@@ -6,7 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:derosa_payment/app/app.dart';
-import 'package:derosa_payment/counter/counter.dart';
+// import 'package:derosa_payment/counter/counter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
