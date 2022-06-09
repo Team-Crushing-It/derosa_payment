@@ -1,8 +1,6 @@
-import 'package:derosa_payment/app/bloc/app_bloc.dart';
 import 'package:derosa_payment/make_payment/view/make_payment.dart';
 import 'package:firestore_payments_api/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -73,7 +71,7 @@ class _HomeState extends State<Home> {
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   primary: Colors.white,
                   textStyle: const TextStyle(fontSize: 20),
                 ),
