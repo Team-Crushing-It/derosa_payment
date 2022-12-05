@@ -23,6 +23,7 @@ dependencies:
     path: packages/firestore_payments_api
 
 
+
 assets:
   - assets/
 
